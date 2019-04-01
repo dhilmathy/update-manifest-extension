@@ -1,0 +1,48 @@
+{
+    "manifestVersion": 1,
+    "id": "update-manifest",
+    "name": "Update Manifest File",
+    "version": "1.1.0",
+    "publisher": "dhilmathy",
+    "targets": [
+        {
+            "id": "Microsoft.VisualStudio.Services"
+        }
+    ],    
+    "description": "Tools for Updating manifest file. Includes task to update manifest file.",
+    "categories": [
+        "Azure Pipelines"
+    ],
+    "icons": {
+        "default": "images/extension-icon.png"        
+    },
+    "files": [
+        {
+            "path": "update-manifest"
+        }
+    ],
+    "content": {
+        "details": {
+            "path": "README.MD"
+        },
+        "license": {
+            "path": "LICENSE"
+        }
+    },
+    "contributions": [
+        {
+            "id": "update-manifest",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "update-manifest"
+            }
+        }
+    ],
+    "repository": {
+        "type": "git",
+        "uri": "https://github.com/dhilmathy/update-manifest-extension"
+    }
+}
