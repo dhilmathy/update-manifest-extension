@@ -1,18 +1,18 @@
 param(
     # Manifest file path
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
     [String]$manifestFilePath,
     # Node to update
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
     [String]$nodeToUpdate,
     # Value to update
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
     [String]$valueToUpdate,
     # Whether the value is Version
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
     [string]$isVersion,
     # Part in version to update
-    [Parameter(Mandatory=$false)]
+    [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
     [string]$versionPart
 )
 
@@ -20,10 +20,10 @@ function Update-Version {
     param (
         [Version]$version, [string]$partToIncrement
     )
-    Write-Host "Current Major: " $version.Major
-    Write-Host "Current Minor: " $version.Minor
-    Write-Host "Current Build: " $version.Build
-    Write-Host "Current Revision: " $version.Revision
+    # Write-Output "Current Major: $($version.Major)"
+    # Write-Output "Current Minor: $($version.Minor)"
+    # Write-Output "Current Build: $($version.Build)"
+    # Write-Output "Current Revision: $($version.Revision)"
 
     $major = $version.Major
     $minor = $version.Minor
@@ -51,27 +51,27 @@ function Update-Version {
 
     $newVersion = "{0}.{1}.{2}.{3}" -f $major, $minor, $build, $revision
 
-    Write-Host "New Version number : " $newVersion
+    # Write-Output $newVersion
     return $newVersion
 }
 
-Write-Host "Manifest file : " $manifestFilePath
-Write-Host "Node to update : " $nodeToUpdate
+Write-Output "Manifest file : $manifestFilePath"
+Write-Output "Node to update : $nodeToUpdate"
 if ($isVersion -eq "true") {
-    Write-Host "Version part to update : " $versionPart    
+    Write-Output "Version part to update : $versionPart"    
 }
 else {
-    Write-Host "Value to update : " $valueToUpdate    
+    Write-Output "Value to update : $valueToUpdate"    
 }
 
-$xml= [XML] (Get-Content $manifestFilePath)
+$xml = [XML] (Get-Content $manifestFilePath)
 $nodes = $xml.SelectNodes($nodeToUpdate)
 
-Write-Host "No of matching nodes in manifest file : " $nodes.Count
+Write-Output "No of matching nodes in manifest file : $($nodes.Count)"
 
-Write-Host "Node values before update : "
-foreach($node in $nodes){
-    Write-Host $node.InnerText
+Write-Output "Node values before update : "
+foreach ($node in $nodes) {
+    Write-Output $node.InnerText
     if ($isVersion -eq "true") {
         $currentVersion = [version]$node.InnerText
         $node.InnerText = Update-Version -version $currentVersion -partToIncrement $versionPart
@@ -82,9 +82,9 @@ foreach($node in $nodes){
 }
 
 $xml.Save($manifestFilePath)
-Write-Host "Manifest file updated and saved."
+Write-Output "Manifest file updated and saved."
 
-Write-Host "Node values after update : "
-foreach($node in $nodes){
-    Write-Host $node.InnerText
+Write-Output "Node values after update : "
+foreach ($node in $nodes) {
+    Write-Output $node.InnerText
 }
