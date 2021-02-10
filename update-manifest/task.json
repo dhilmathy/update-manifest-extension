@@ -1,27 +1,27 @@
 {
   "id": "38337b43-cd26-4267-98b4-5e0e3ff420da",
   "name": "update-manifest",
-  "friendlyName": "Update Manifest file",
-  "description": "Task to update one or more XML tags inside manifest file.",
+  "friendlyName": "Update Manifest file(s)",
+  "description": "Task to update one or more XML tags inside manifest file(s).",
   "helpMarkDown": "[More information](https://github.com/dhilmathy/update-manifest-extension)",
   "category": "Utility",
   "author": "Mathivanan Palanisamy",
   "version": {
-    "Major": 1,
-    "Minor": 1,
-    "Patch": 7
+    "Major": 2,
+    "Minor": 0,
+    "Patch": 5
   },
   "preview": false,
   "showEnvironmentVariables": false,
-  "instanceNameFormat": "Update manifest file: $(manifestFilePath)",
+  "instanceNameFormat": "Update manifest file(s): $(manifestFilePaths)",
   "inputs": [
     {
-      "name": "manifestFilePath",
+      "name": "manifestFilePaths",
       "type": "filePath",
-      "label": "Manifest file path",
+      "label": "Manifest file path(s)",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "Manifest file path"
+      "helpMarkDown": "Manifest file path(s). For multiple files separate by pipe (`|`)."
     },
     {
       "name": "nodeToUpdate",
@@ -65,8 +65,8 @@
     }
   ],
   "execution": {
-    "PowerShell": {
-      "target": "$(currentDirectory)\\update-manifest.ps1",
+    "PowerShell3": {
+      "target": "$(currentDirectory)\\task.ps1",
       "argumentFormat": "",
       "workingDirectory": "$(currentDirectory)"
     }
