@@ -1,15 +1,15 @@
 {
   "manifestVersion": 1,
   "id": "update-manifest",
-  "name": "Update Manifest File",
-  "version": "1.1.7",
+  "name": "Update Manifest File(s)",
+  "version": "2.0.5",
   "publisher": "dhilmathy",
   "targets": [
     {
       "id": "Microsoft.VisualStudio.Services"
     }
   ],
-  "description": "Updates value (or) auto-increment version inside manifest (or any XML based) file.",
+  "description": "Updates value (or) auto-increment version inside manifest (or any XML based) file(s).",
   "categories": ["Azure Pipelines"],
   "branding": {
     "color": "rgb(34, 34, 34)",

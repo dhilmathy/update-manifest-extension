@@ -1,7 +1,7 @@
 param(
     # Manifest file path
     [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
-    [String]$manifestFilePath,
+    [String]$manifestFilePaths,
     # Node to update
     [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
     [String]$nodeToUpdate,
@@ -55,36 +55,45 @@ function Update-Version {
     return $newVersion
 }
 
-Write-Output "Manifest file : $manifestFilePath"
-Write-Output "Node to update : $nodeToUpdate"
-if ($isVersion -eq "true") {
-    Write-Output "Version part to update : $versionPart"    
-}
-else {
-    Write-Output "Value to update : $valueToUpdate"    
-}
+$filePaths = $manifestFilePaths.Trim().split("|", [StringSplitOptions]'RemoveEmptyEntries').Trim()
 
-$xml = [XML] (Get-Content $manifestFilePath)
-$nodes = $xml.SelectNodes($nodeToUpdate)
+$i = 1
+foreach ($filePath in $filePaths){
 
-Write-Output "No of matching nodes in manifest file : $($nodes.Count)"
-
-Write-Output "Node values before update : "
-foreach ($node in $nodes) {
-    Write-Output $node.InnerText
+    Write-Output "----------------------------------------------------------------"
+    Write-Output "Manifest file #($i) : $filePath"
+    Write-Output "Node to update : $nodeToUpdate"
     if ($isVersion -eq "true") {
-        $currentVersion = [version]$node.InnerText
-        $node.InnerText = Update-Version -version $currentVersion -partToIncrement $versionPart
+        Write-Output "Version part to update : $versionPart"    
     }
     else {
-        $node.InnerText = $valueToUpdate
+        Write-Output "Value to update : $valueToUpdate"    
     }
-}
 
-$xml.Save($manifestFilePath)
-Write-Output "Manifest file updated and saved."
+    $xml = [XML] (Get-Content $filePath)
+    $nodes = $xml.SelectNodes($nodeToUpdate)
 
-Write-Output "Node values after update : "
-foreach ($node in $nodes) {
-    Write-Output $node.InnerText
+    Write-Output "No of matching nodes in manifest file : $($nodes.Count)"
+
+    Write-Output "Node values before update : "
+    foreach ($node in $nodes) {
+        Write-Output $node.InnerText
+        if ($isVersion -eq "true") {
+            $currentVersion = [version]$node.InnerText
+            $node.InnerText = Update-Version -version $currentVersion -partToIncrement $versionPart
+        }
+        else {
+            $node.InnerText = $valueToUpdate
+        }
+    }
+
+    $xml.Save($filePath)
+    Write-Output "Manifest file #($i) updated and saved."
+
+    Write-Output "Node values after update : "
+    foreach ($node in $nodes) {
+        Write-Output $node.InnerText
+    }
+
+    $i = $i + 1
 }
